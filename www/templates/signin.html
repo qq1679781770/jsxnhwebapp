@@ -1,0 +1,53 @@
+{% extends '__base__.html' %}
+{% block title %} 登录{% endblock %}
+{% block beforehead %}
+<script>
+$(function() {
+    var vmAuth = new Vue({
+        el: '#vm',
+        data: {
+            email: '',
+            passwd: ''
+        },
+        methods: {
+            submit: function(event) {
+                event.preventDefault();
+                var
+                    $form = $('#vm'),
+                    email = this.email.trim().toLowerCase(),
+                    data = {
+                        email: email,
+                        passwd: this.passwd==='' ? '' : CryptoJS.SHA1(email + ':' + this.passwd).toString()
+                    };
+                $form.postJSON('/api/authenticate', data, function(err, result) {
+                    if (! err) {
+                        location.assign('/');
+                    }
+                });
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+{% block content %}
+<form id="vm" v-on="submit: submit" class="uk-text-center uk-form" >
+    
+    <div class="uk-margin-top">
+        <div class="uk-inline">
+            <span class="uk-form-icon" uk-icon="icon: user"></span>
+            <input v-model="email" name="email" type="text" placeholder="电子邮件"  class="uk-input">
+        </div>
+    </div>
+
+    <div class="uk-margin" >
+        <div class="uk-inline">
+            <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+            <input v-model="passwd" name="passwd" type="password" placeholder="口令"class="uk-input" >
+        </div>
+    </div>
+   <div class="uk-margin ">
+          <button type="submit" class="uk-button uk-button-primary" >提交</button>
+  </div>
+</form>
+{% endblock %}
