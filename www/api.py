@@ -5,7 +5,7 @@
 #version:0.1
 
 import re, time, json, logging, hashlib, base64, asyncio
-from models import User, Comment, Blog, next_id
+from models import User, Comment, Blog,Message, next_id
 from webframe import get,post
 from aiohttp import web
 from error import APIValueError,APIResourceNotFoundError,APIError,APIPermissionError
@@ -130,3 +130,14 @@ def api_create_comment(id, request, *, content):
     comment = Comment(blog_id=blog.id, user_id=user.id, user_name=user.name, user_image=user.image, content=content.strip())
     yield from comment.save()
     return comment
+
+@post('/api/messages')
+def api_create_message(request,*,content):
+    user=request.__user__
+    if user is None:
+        raise APIPermissionError('Please signin first.')
+    if not content or not content.strip():
+        raise APIValueError('content')
+    message=Message(user_id=user.id, user_name=user.name, user_image=user.image,content=content.strip())
+    yield from message.save()
+    return message
