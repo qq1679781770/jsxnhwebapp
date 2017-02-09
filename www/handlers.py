@@ -4,7 +4,7 @@
 #Author:jsxnh(qq1679781770@gmail.com)
 #version:0.1
 import re, time, json, logging, hashlib, base64, asyncio
-from models import User, Comment, Blog, next_id
+from models import User, Comment, Blog,Message, next_id
 from webframe import get,post
 from aiohttp import web
 from factories import COOKIE_NAME
@@ -33,6 +33,13 @@ def index(*, page='1'):
         'dt':dt
     }
 
+@get('/message')
+def message():
+    messages=yield from Message.findAll(orderBy='created_at desc')
+    return{
+        '__template__':'message.html',
+        'messages':messages
+    }
 
 @get('/register')
 def register():
@@ -61,10 +68,9 @@ def get_blog(id):
     
     '''
     comments = yield from Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
-    '''
+    
     for c in comments:
         c.html_content = text2html(c.content)
-    '''
     return {
         '__template__': 'blog.html',
         'blog': blog,
