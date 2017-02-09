@@ -1,0 +1,90 @@
+{% extends '__base__.html' %}
+
+{% block title %}留言{% endblock %}
+
+
+{% block beforehead %}
+
+<script>
+
+$(function () {
+    var $form = $('#form-comment');
+    $form.submit(function (e) {
+        e.preventDefault();
+        $form.showFormError('');
+        var content = $form.find('textarea').val().trim();
+        if (content==='') {
+            return $form.showFormError('请输入评论内容！');
+        }
+        $form.postJSON('api/messages', { content: content }, function (err, result) {
+            if (err) {
+                return $form.showFormError(err);
+            }
+            refresh();
+        });
+    });
+});
+</script>
+
+{% endblock %}
+
+{% block content %}
+<div class=uk-hight-small>
+    <img  src="/static/images/frame1.jpg">
+</div>
+<div style="background-image: url(/static/images/background.jpg);" >
+<ul class="uk-comment-list">
+    {% for message in messages %}
+<li>
+<article class="uk-comment uk-comment-primary">
+    <header class="uk-comment-header uk-grid-medium uk-flex-middle" uk-grid>
+        <div class="uk-width-auto">
+            <img class="uk-comment-avatar" src="/static/images/user.jpg" width="80" height="80" alt="">
+        </div>
+        <div class="uk-width-expand">
+            <h4 class="uk-comment-title uk-margin-remove">{{ message.user_name }}</h4>
+            <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top">
+                <li>{{ message.created_at|datetime }}</li>
+            </ul>
+        </div>
+    </header>
+    <div class="uk-comment-body">
+        <p>{{ message.content }}</p>
+    </div>
+</article>
+</li>
+{% else %}
+<p class="uk-text-bold uk-text-large">还没有人评论...</p>
+{% endfor %}
+</ul>
+{% if __user__ %}
+        <h3>发表评论</h3>
+
+        <article class="uk-comment uk-comment-primary">
+            <header class="uk-comment-header uk-grid-medium uk-flex-middle" uk-grid>
+               <div class="uk-width-auto">
+            <img class="uk-comment-avatar" src="/static/images/user.jpg" width="80" height="80" alt="">
+            </div>
+               <div class="uk-width-expand">
+            <h4 class="uk-comment-title uk-margin-remove">{{  __user__.name  }}</h4>
+               </div>
+            </header>
+            <div class="uk-comment-body">
+                <form id="form-comment" class="uk-form">
+                    <div class="uk-alert uk-alert-danger uk-hidden"></div>
+                    <div class="uk-form-row">
+                        <textarea rows="6" placeholder="说点什么吧" style="width:100%;resize:none;"></textarea>
+                    </div>
+                    <div class="uk-form-row">
+                        <button type="submit" class="uk-button uk-button-primary"><i class="uk-icon-comment"></i> 发表评论</button>
+                    </div>
+                </form>
+            </div>
+        </article>
+
+        <hr class="uk-article-divider">
+    {% else %}
+    <h3>评论请<a href="/signin">登录</a></h3>
+    {% endif %}
+</div>
+{% endblock %}
