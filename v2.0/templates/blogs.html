@@ -1,0 +1,77 @@
+{% extends '__base__.html' %}
+
+{% block title %}首页{% endblock %}
+
+{% block content %}
+ <div uk-grid>
+    <div class="uk-width-3-4">
+    <div>
+        {% for blog in blogs %}
+            <article class="uk-article">
+                <h2><a href="/blog/{{ blog.id }}">{{ blog.name }}</a></h2>
+                <p class="uk-article-meta">发表于{{ blog.created_at|datetime}}</p>
+                <p>{{ blog.summary }}</p>
+                <p><a href="/blog/{{ blog.id }}">继续阅读 <span class="uk-icon" uk-icon="icon:more"></span></a></p>
+            </article>
+            <hr class="uk-article-divider">
+        {% endfor %}
+    </div>
+    <div >
+    <ul class="uk-pagination uk-flex-center" uk-margin> 
+    <li ><a h ref=""  id="previous"><span class="uk-margin-right"uk-pagination-previous></span>上一页</a></li>
+    <li><span id="page">{{ page.page_index }}</span></li>
+    <li ><a   id="next">下一页<span   class="uk-margin-left"uk-pagination-next></span></a></li>
+    </ul> 
+    </div>
+    </div>
+    <div class=" uk-card  uk-width-expand uk-margin-top">
+   <div class="uk-card-header">
+        <div class="uk-grid-small uk-flex-middle" uk-grid>
+            <div class="uk-width-auto">
+                <img class="uk-border-circle" width="40" height="40" src="/static/images/1.jpg">
+            </div>
+            <div class="uk-width-expand">
+                <h3 class="uk-card-title uk-margin-remove-bottom">Jsxnh</h3>
+                 <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00">{{ dt.year }} 年 {{ dt.month }} 月 {{ dt.day }}</time></p>
+            </div>
+        </div>
+    </div>
+    <div class="uk-card-body">
+        <p>The magic that code bring prevent from falling asleep</p>
+        <p> <h3>Contact:</h3>qq1679781770@gmail.com</p>
+    </div>
+    <div class="uk-card-footer">
+         <a href="/about" class="uk-button uk-button-text">Read more</a>
+    </div>
+    </div>
+ </div>
+
+{% endblock %}
+{% block beforebody %}
+<script>
+$(function()
+{
+    {% if page.has_previous %}
+    $("#previous").click(function()
+    {
+      var previous_page={{ page.page_index }}-1;
+      location.assign('/?page='+previous_page);
+    });
+    {% else %}
+    $("#previous").hide();
+    {%  endif %}
+    
+    {% if page.has_next %}
+    $("#next").click(function()
+    {
+      var next_page={{ page.page_index }}+1;
+      location.assign('/?page='+next_page);
+    });
+    {% else %}
+    $("#next").hide();
+    {%  endif %}
+
+
+});
+</script>
+{% endblock %}

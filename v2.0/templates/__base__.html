@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta cahrset="uft-8">
+        <title>{% block title%}{% endblock%}</title>
+        <link rel="stylesheet" href="/static/css/uikit.min.css">
+        <link rel="stylesheet" href="/static/css/highlight.css">
+        <script src="/static/js/jquery.min.js"></script>
+        <script src="/static/js/sha1.min.js"></script>
+        <script src="/static/js/uikit.min.js"></script>
+        <script src="/static/js/vue.min.js"></script>
+        <script src="/static/js/awesome.js"></script>
+        {% block beforehead %}{% endblock %}
+    </head>
+    <body>
+       <nav class="uk-navbar-container " uk-sticky="bottom: #offset" uk-navbar>
+        <div class="uk-navbar-left  uk-card-body uk-card-small uk-text-center uk-text-large uk-text-bold">
+            简史小男孩
+        </div>
+    <div class="uk-navbar-center ">
+       
+        <ul class="uk-navbar-nav uk-text-primary">
+            <li><a href="/" ><span class="uk-icon" uk-icon="icon:home"></span>Home</a></li>
+            <li>
+                <a href="/manage/blogs"><span class="uk-icon" uk-icon="icon:file-edit"></span>Blogs</a>
+            </li>
+            <li><a href="/message"><span class="uk-icon" uk-icon="icon:comments"></span>message board</a></li>
+            <li><a href="https://github.com/qq1679781770/jsxnhwebapp" target="_blank"><span class="uk-icon" uk-icon="icon:code"></span>code</a></li>
+        </ul>
+
+    </div>
+    <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                {% if __user__ %}
+                    <li >
+                         <span class="uk-icon uk-margin-small-right" uk-icon="icon:user"></span>{{ __user__.name }}
+                        <div class="uk-navbar-dropdown">
+                            <ul class="uk-nav uk-navbar-dropdown-nav">
+                                <li><a href="/signout"><span class="uk-icon" uk-icon="icon:sign-out"></span>sign out</a></li>
+                                {% if __user__.admin %}
+                                <li><a href="/manage/blogs/create"><span class="uk-icon" uk-icon="icon:pencil"></span>new blog</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </li>
+                {% else %}
+                    <li><a href="/signin"><span class="uk-icon" uk-icon="icon:sign-in"></span>sign in</a></li>
+                    <li><a href="/register"><span class="uk-icon" uk-icon="icon:user"></span> register</a></li>
+                {% endif %}
+                </ul>
+    </div>
+    </nav>
+   <div>
+    <div class="uk-container ">
+            <!-- content -->
+            {% block content %}
+            {% endblock %}
+            <!-- // content -->
+    </div>
+   </div>
+    <div class="uk-margin-large-top" style="background-color:#eee; border-top:1px solid #ccc;">
+        <div class="uk-container uk-container-center uk-text-center">
+            <div class="uk-panel uk-margin-top uk-margin-bottom">
+                <p>
+                    <a target="_blank" href="#" class="uk-icon-button "uk-icon="icon:facebook"></a>
+                    <a target="_blank" href="#" class="uk-icon-button "uk-icon="icon:github"></a>
+                    <a target="_blank" href="#" class="uk-icon-button "uk-icon="icon:twitter"></a>
+                    <a target="_blank" href="#" class="uk-icon-button "uk-icon="icon:google"></a>
+                </p>
+                <p>Powered by <a href="#">jsxnh</a>. Copyright &copy; 2017. Manage</p>
+                <p><a href="http://www.jianshixiaonanhai.com/" >www.jianshixiaonanhai.com</a>. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+    </body>
+{%  block beforebody %}
+{% endblock %}
+</html>
